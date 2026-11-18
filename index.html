@@ -100,8 +100,6 @@
   .feedback{min-height:1.6em;margin-top:14px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--rose)}
   .hint{font-size:.92rem;color:var(--muted);line-height:1.55;display:none;font-weight:300}
   .hint.show{display:block;animation:rise .6s both}
-  .answer-peek{display:none;margin-top:10px;font-size:.75rem;letter-spacing:.12em;color:#9fe0b9}
-  body.peek .answer-peek{display:block}
   .shake{animation:shake .45s}
   @keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
 
@@ -210,24 +208,6 @@
     75%{transform:translate(-3px,7px) skewX(-7deg);filter:hue-rotate(-60deg) contrast(2)}
     100%{transform:none}}
 
-  /* ---------- preview tools (only in preview build) ---------- */
-  .tools-btn,.tools{display:none}
-  body.preview .tools-btn{display:flex}
-  .banner{display:none}
-  body.preview .banner{display:block;position:fixed;top:0;left:0;right:0;z-index:6;text-align:center;font-size:.66rem;letter-spacing:.24em;
-    text-transform:uppercase;padding:7px;background:rgba(159,224,185,.12);color:#9fe0b9;border-bottom:1px solid rgba(159,224,185,.2);backdrop-filter:blur(6px)}
-  .tools-btn{position:fixed;bottom:16px;left:16px;z-index:7;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;cursor:pointer;
-    background:#9fe0b9;color:#0b1a12;border:none;font-family:'Jost';font-size:.78rem;font-weight:500;letter-spacing:.06em;box-shadow:0 8px 30px rgba(0,0,0,.4)}
-  .tools.open{display:block}
-  .tools{position:fixed;bottom:66px;left:16px;z-index:7;width:min(320px,calc(100vw - 32px));max-height:70vh;overflow:auto;
-    background:rgba(14,12,34,.94);border:1px solid rgba(159,224,185,.3);border-radius:18px;padding:16px;backdrop-filter:blur(10px);text-align:left}
-  .tools h4{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:#9fe0b9;margin:4px 0 10px;font-weight:500}
-  .tools .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
-  .tools button.j{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text);border-radius:10px;
-    padding:9px 8px;font-family:'Jost';font-size:.8rem;cursor:pointer;text-align:left}
-  .tools button.j:hover{border-color:#9fe0b9;color:#9fe0b9}
-  .tools label{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--text);margin:8px 0;cursor:pointer}
-  .tools p{font-size:.76rem;color:var(--muted);line-height:1.5;margin-top:10px}
   @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -246,13 +226,11 @@
 <div class="silly-bg"></div>
 <div class="hush-bg"></div>
 <div class="glitch-text" aria-hidden="true"><span>SYSTEM OVERRIDE</span></div>
-<div class="banner">Preview · just for you</div>
 
 <main>
   <!-- ============ PART 0: the dummy prank ============ -->
   <section class="screen fun" id="s-p1">
     <div class="reveal">
-      <div class="tag" style="animation-delay:.1s">Sakshi's Official 25th Birthday Portal™</div>
       <div class="h1x" style="animation-delay:.3s">BIRTHDAY<br>.EXE</div>
       <div class="box" style="animation-delay:.6s">
         <p class="fsmall">Loading your birthday surprise…</p>
@@ -367,7 +345,6 @@
       <div class="feedback" id="feedback"></div>
       <div class="hint" id="hint"></div>
       <button class="btn ghost" id="hintBtn" type="button">I need a little light ✦ hint</button>
-      <div class="answer-peek" id="peek"></div>
     </div>
     <div class="reward" id="reward">
       <div class="reveal">
@@ -408,33 +385,8 @@
 
 <button class="sound" id="soundBtn" type="button" aria-label="Toggle sound">♪</button>
 
-<button class="tools-btn" id="toolsBtn" type="button">✎ Preview tools</button>
-<div class="tools" id="tools">
-  <h4>Jump to a screen</h4>
-  <div class="grid">
-    <button class="j" data-go="wait">Countdown</button>
-    <button class="j" data-go="p1">😜 Prank: loading</button>
-    <button class="j" data-go="p2">😜 Prank: quiz</button>
-    <button class="j" data-go="p3">😜 Certificate</button>
-    <button class="j" data-go="p4">😜 Error 404</button>
-    <button class="j" data-go="p5">Glitch → "look up"</button>
-    <button class="j" data-go="intro">Intro</button>
-    <button class="j" data-go="r0">Riddle 1</button>
-    <button class="j" data-go="r1">Riddle 2</button>
-    <button class="j" data-go="r2">Riddle 3</button>
-    <button class="j" data-go="r3">Riddle 4</button>
-    <button class="j" data-go="r4">Riddle 5</button>
-    <button class="j" data-go="cake">Cake</button>
-    <button class="j" data-go="final">Final message</button>
-    <button class="j" data-go="reset">↺ Start over</button>
-  </div>
-  <h4>Options</h4>
-  <label><input type="checkbox" id="peekBox"> Show answers on riddle cards</label>
-  <p>Flow: prank (😜) → glitch → starry hunt → cake → final. This preview has no countdown lock and shows these tools. Sakshi's version opens only at 6:45 pm on 24 Nov and has none of this.</p>
-</div>
-
 <script>
-const MODE = "final";   // "preview" or "final"
+const MODE = "final";
 
 /* ===== EDIT HERE: the shayari at the very end. Use \n for new lines. ===== */
 const SHAYARI = "";
@@ -548,7 +500,6 @@ function loadRiddle(){
   $("rtext").innerHTML=linesHTML(r.text,.15,.16);
   $("answer").value=""; $("feedback").innerHTML="&nbsp;";
   $("hint").classList.remove("show"); $("hint").textContent=r.hint; $("hintBtn").style.display="inline-block";
-  $("peek").textContent="Answer: "+r.answer;
   $("card").style.display="block"; $("reward").classList.remove("show");
   drawConst($("const"),idx); drawDots();
   $("card").style.animation="none"; void $("card").offsetWidth; $("card").style.animation="rise .8s both";
@@ -711,34 +662,7 @@ function boot(){
   else startPrank();
 }
 
-/* ---------- preview tools ---------- */
-if(MODE==="preview"){
-  document.body.classList.add("preview");
-  $("toolsBtn").onclick=()=>$("tools").classList.toggle("open");
-  $("peekBox").onchange=e=>document.body.classList.toggle("peek",e.target.checked);
-  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{
-    const g=b.dataset.go; clearInterval(loadIv);
-    if(g==="p1"){ startPrank(); }
-    else if(g==="p2"){ toSilly(); qi=0; show("s-p2"); renderQ(); }
-    else if(g==="p3"){ toSilly(); show("s-p3"); }
-    else if(g==="p4"){ toSilly(); show("s-p4"); }
-    else if(g==="p5"){ toNight(); document.body.classList.add("hush"); show("s-p5"); }
-    else if(g==="reset"){ idx=0; store.set(KEY,0); $("begin").textContent="Light the first star"; startPrank(); }
-    else { toNight(); startMusic(); }
-    if(g.startsWith("p")||g==="reset"){}
-    else if(g==="wait"){ show("s-wait"); tick(); clearInterval(timer); timer=setInterval(()=>{const ms=OPENS_AT-new Date(); if(ms>0) tick();},1000); }
-    else if(g==="intro"){ show("s-intro"); }
-
-    else if(g==="cake"){ idx=RIDDLES.length; toCake(); }
-    else if(g==="final"){ toFinal(); }
-    else { idx=+g.slice(1); show("s-hunt"); loadRiddle(); }
-    if(g!=="wait") clearInterval(timer);
-    $("tools").classList.remove("open");
-  });
-  boot();
-}else{
-  if(OPENS_AT-new Date()>0){ show("s-wait"); tick(); timer=setInterval(tick,1000); } else boot();
-}
+if(OPENS_AT-new Date()>0){ show("s-wait"); tick(); timer=setInterval(tick,1000); } else boot();
 
 /* ===================== SKY ===================== */
 const cv=$("sky"), cx=cv.getContext("2d");
